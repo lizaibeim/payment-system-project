@@ -1,5 +1,4 @@
 # secure-payment-system
-A project for COMP3334 Computer System Security
 
 ## Program structure
 	Client side:
