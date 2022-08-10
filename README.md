@@ -189,4 +189,4 @@ Input 2 in both terminal to close the session
 
 # Authors  
 [**YiFan Jiang**](https://www.linkedin.com/in/yifan-jiang-0828/)  
-**Zaibei Li**
+[**Zaibei Li**](https://www.linkedin.com/in/zaibei-eric-li/)
