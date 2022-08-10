@@ -1,5 +1,4 @@
 # secure-payment-system
-An encrypted payment system (including server and client side) developed in Java
 
 ## Program structure
 	Client side:
