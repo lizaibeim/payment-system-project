@@ -188,5 +188,5 @@ Input 2 in both terminal to close the session
 ![image](https://user-images.githubusercontent.com/38242437/183766582-af1d650d-da9b-4ee7-ab5d-b81bd62723f4.png)
 
 ## Authors  
-+ [**YiFan Jiang**](https://www.linkedin.com/in/yifan-jiang-0828/)  
++ [**Yifan Jiang**](https://www.linkedin.com/in/yifan-jiang-0828/)  
 + [**Zaibei Li**](https://www.linkedin.com/in/zaibei-eric-li/)
