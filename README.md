@@ -38,19 +38,19 @@ What services provided by SSL are
 2.	Encrypt data to prevent data from being stolen in the middle;
 3.	Maintain data integrity and ensure that data is not changed during transmission.
 
-In our online payment system implementation, we first use Java keytool to generate certificates of client and server. Then, we export them out and import them into the other’s key store. Corresponding commands are shown in the section: Application installation guide -- Prepare certificates. The certificates are used for later RSA encryption algorithms
+In our online payment system implementation, we first use Java keytool to generate certificates of client and server. Then, we export them out and import them into the other’s key store. Corresponding commands are shown in the section: Application installation guide -- Prepare certificates. The certificates are used for later RSA encryption algorithms·
 
 Then we use Java SSL package (javax.net.ssl) to implement the authentication of client and server.
 ![image](https://user-images.githubusercontent.com/38242437/183751812-b24bd14d-c350-4006-86e6-15e8a27ec6da.png)
 
-1.	The client sends ClientHello message to the server. The message includes supported encryption algorithms and so on.
+1.	The client sends ClientHello message to the server. The message includes supported signature algorithms and so on.
 ![image](https://user-images.githubusercontent.com/38242437/183752343-3ad607b2-7610-49d7-9178-47d4bd185439.png)
 
-2.	The server responds with ServerHello message and notifies one of the encryption methods (RSA in our system) chosen from the encryption algorithms that the client supports to the client.
+2.	The server responds via a ServerHello message and notifies one of the signature algorithms (SHA256withRSA in this demo case) chosen from the signature algorithms supported by the client.
 ![image](https://user-images.githubusercontent.com/38242437/183752793-45403ff6-f065-4263-83c7-7cad38abd9a0.png)
 ![image](https://user-images.githubusercontent.com/38242437/183752821-3ad7e46b-6271-46a2-aaf5-7c92469ba620.png)
 
-3.	With this encryption algorithm, the server sends its public key to the client.
+3.	The server sends its public key via *ECDHServerKeyExchange* message to the client including **message** and the **digital signature** as a server digital certificate. The digital signature is message digest signed by client's stored certificate authority's private key. The client verifies validity of the server digital certificate by decrpyting the digital signature with its sotred certificate authority's public key and check the integrity of the message by comparing the message digest with its computed the message digest with the same algorithm.
 ![image](https://user-images.githubusercontent.com/38242437/183753051-fbf24acc-093e-4ba9-83eb-ca22fa72f497.png)
 
 4.	The negotiation between the server and the client is done. The server sends ServerHelloDone message to the client.
@@ -58,7 +58,7 @@ Then we use Java SSL package (javax.net.ssl) to implement the authentication of 
 ![image](https://user-images.githubusercontent.com/38242437/183753150-0a980a71-d6e5-45ac-8fc5-06a79d14fda1.png)
 ![image](https://user-images.githubusercontent.com/38242437/183753170-8690c383-0c64-4ef6-a9a7-517ca8336629.png)
 
-5.	The client uses the server’s public key to create a session key and send to the server using ECDHClientKeyExchange message.
+5.	The client uses the server’s public key to create a session key and send to the server via *ECDHClientKeyExchange* message.
 ![image](https://user-images.githubusercontent.com/38242437/183753846-c230b221-8ffb-4061-b4f0-11dbf3168dda.png)
 
 6.	The client notifies the server to change the encryption algorithm and sends with Change Cipher Spec message. 
