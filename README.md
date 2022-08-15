@@ -135,7 +135,7 @@ This kind of mechanism can prevent attackers from sending permit packets interce
 **[Enviroment Variables Setting]**  
 Go to `control panel -> System and Security -> System -> Advanced system settings -> Advanced -> Environment Variables -> 
 System variables -> Path`, add java executable programs path e.g. `C:\Program Files\Java\jdk-18.0.2\bin` to environment varibale.
-### Generate Keystore ###
+### Generate keystore ###
 In terminal, go to the project directory *./secrue-payment-system/*, type the following command:  
 `keytool -genkey -v -alias payment-ssl-server -keyalg RSA -keystore ./server_ks -dname "CN=localhost,OU=cn,O=cn,L=cn,ST=cn,C=cn" -storepass server -keypass 123456`  
 
@@ -156,7 +156,7 @@ Generating 2,048 bit RSA key pair and self-signed certificate (SHA256withRSA) wi
         for: CN=localhost, OU=cn, O=cn, L=cn, ST=cn, C=cn
 [Storing ./client_ks]
 ```
-### Export Certificate ###
+### Add trusted certificate ###
 Since the certificate of the server is generated manually and there is no signature of any trusted organization, the client cannot verify the validity of the server certificate, and the communication will inevitably fail. It needs to create a repository for the client that holds all the credentials, and then import the server certificate into the repository. In this way, when the client connects to the server, it will find that the server's certificate is in its own trust list, and it can communicate normally.
 
 Next, export the certificate of the server and import it into the client's repository. The first step is to export the certificate of the server with the command `keytool -export -alias payment-ssl-server -keystore ./server_ks -file server_key.cer` and enter the keystore password: `server`.
@@ -164,18 +164,69 @@ Next, export the certificate of the server and import it into the client's repos
 C:\Users\lizai\Desktop\porfolio\secure-payment-system>keytool -export -alias payment-ssl-server -keystore ./server_ks -file server_key.cer
 Enter keystore password:
 Certificate stored in file <server_key.cer>
+```  
+Then import the server certificate into the client key store with the command `keytool -import -trustcacerts -alias payment-ssl-server -file ./server_key.cer -keystore ./client_ks` and enter the keystore password: `client`.
 ```
+C:\Users\lizai\Desktop\porfolio\secure-payment-system>keytool -import -trustcacerts -alias payment-ssl-server -file ./server_key.cer -keystore ./client_ks
+Enter keystore password:
+Owner: CN=localhost, OU=cn, O=cn, L=cn, ST=cn, C=cn
+Issuer: CN=localhost, OU=cn, O=cn, L=cn, ST=cn, C=cn
+Serial number: 39188e10476696a0
+Valid from: Mon Aug 15 16:20:42 CEST 2022 until: Sun Nov 13 15:20:42 CET 2022
+Certificate fingerprints:
+         SHA1: D8:30:B8:50:97:5E:56:BD:4F:1D:49:5B:38:CE:86:48:15:2E:30:C5
+         SHA256: A5:D5:1A:EC:F9:B1:63:67:C3:0D:68:05:3D:EE:C6:4D:1F:F8:CF:B1:9A:6D:E9:D2:3C:57:1C:72:B9:D7:C2:C5
+Signature algorithm name: SHA256withRSA
+Subject Public Key Algorithm: 2048-bit RSA key
+Version: 3
 
-![image](https://user-images.githubusercontent.com/38242437/183762428-90543521-ea34-441b-b288-9e1bfcdbdd62.png)
-Then import the exported certificate into the client certificate store    
-The password is: client
-![image](https://user-images.githubusercontent.com/38242437/183762546-bab43db9-6ba1-441b-be94-ac50c51f2166.png)
+Extensions:
 
-Do the same command for the client  
-The password is: client
-![image](https://user-images.githubusercontent.com/38242437/183762710-72685f0f-6eca-4788-afc3-c116f27da8c6.png)
-The password is: server
-![image](https://user-images.githubusercontent.com/38242437/183762728-1bad824f-a37a-4d95-98b4-c109510eb33c.png)
+#1: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 03 79 D1 D6 E2 23 D0 A8   2F 21 84 2F D2 28 50 69  .y...#../!./.(Pi
+0010: 92 9B 7C 49                                        ...I
+]
+]
+
+Trust this certificate? [no]:  yes
+Certificate was added to keystore
+```  
+Do the same thing for the client with the command `keytool -export -alias payment-ssl-client -keystore ./client_ks -file client_key.cer` and enter the keystore password: `client`.  
+```
+C:\Users\lizai\Desktop\porfolio\secure-payment-system>keytool -export -alias payment-ssl-client -keystore ./client_ks -file client_key.cer
+Enter keystore password:
+Certificate stored in file <client_key.cer>
+```  
+Then import the client certificate into the server keystore with the command `keytool -import -trustcacerts -alias payment-ssl-client -file ./client_key.cer -keystore ./server_ks` and enter the keystore password `server`.
+```
+C:\Users\lizai\Desktop\porfolio\secure-payment-system>keytool -import -trustcacerts -alias payment-ssl-client -file ./client_key.cer -keystore ./server_ks
+Enter keystore password:
+Owner: CN=localhost, OU=cn, O=cn, L=cn, ST=cn, C=cn
+Issuer: CN=localhost, OU=cn, O=cn, L=cn, ST=cn, C=cn
+Serial number: 9a6db05bdbffd93f
+Valid from: Mon Aug 15 16:22:56 CEST 2022 until: Sun Nov 13 15:22:56 CET 2022
+Certificate fingerprints:
+         SHA1: 68:A4:D3:86:45:6C:80:1D:E9:C0:D6:61:C2:8B:7A:5F:F8:E1:D7:A8
+         SHA256: 8E:75:83:43:A4:41:60:F8:44:C0:4B:3E:32:56:54:8C:B9:B6:D9:D9:0B:86:8A:DD:D4:D9:8B:01:2B:0B:8F:F5
+Signature algorithm name: SHA256withRSA
+Subject Public Key Algorithm: 2048-bit RSA key
+Version: 3
+
+Extensions:
+
+#1: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: D3 5E 9C 80 32 F8 67 9B   29 08 0D ED 2C 22 F6 85  .^..2.g.)...,"..
+0010: D8 3A 1D 6C                                        .:.l
+]
+]
+
+Trust this certificate? [no]:  yes
+Certificate was added to keystore
+```
 
 ## Use cases (3)
 #### 1.
