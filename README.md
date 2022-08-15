@@ -50,7 +50,7 @@ Then we use Java SSL package (javax.net.ssl) to implement the authentication of 
 ![image](https://user-images.githubusercontent.com/38242437/183752793-45403ff6-f065-4263-83c7-7cad38abd9a0.png)
 ![image](https://user-images.githubusercontent.com/38242437/183752821-3ad7e46b-6271-46a2-aaf5-7c92469ba620.png)
 
-3.	The server sends its public key via *ECDHServerKeyExchange* message to the client including **message** and the **digital signature** as a server digital certificate. The digital signature is message digest signed by client's stored certificate authority's private key. The client verifies validity of the server digital certificate by decrpyting the digital signature with its sotred certificate authority's public key and check the integrity of the message by comparing the message digest with its computed the message digest with the same algorithm.
+3.	The server sends its public key via *ECDHServerKeyExchange* message to the client including **message** and the **digital signature** as a server digital certificate. The digital signature is an encrypted message digest signed by client's stored certificate authority's private key. The client verifies validity of the server digital certificate by decrpyting the digital signature with its sotred certificate authority's public key and check the integrity of the message by comparing the message digest with its computed the message digest with the same algorithm.
 ![image](https://user-images.githubusercontent.com/38242437/183753051-fbf24acc-093e-4ba9-83eb-ca22fa72f497.png)
 
 4.	The negotiation between the server and the client is done. The server sends ServerHelloDone message to the client.
