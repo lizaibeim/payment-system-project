@@ -136,7 +136,7 @@ This kind of mechanism can prevent attackers from sending permit packets interce
 Go to `control panel -> System and Security -> System -> Advanced system settings -> Advanced -> Environment Variables -> 
 System variables -> Path`, add java executable programs path e.g. `C:\Program Files\Java\jdk-18.0.2\bin` to environment varibale.
 ### Generate keystore ###
-In terminal, go to the project directory *./secrue-payment-system/*, type the following command:  
+Open terminal as administrator, go to the project directory *./secrue-payment-system/*, type the following command:  
 `keytool -genkey -v -alias payment-ssl-server -keyalg RSA -keystore ./server_ks -dname "CN=localhost,OU=cn,O=cn,L=cn,ST=cn,C=cn" -storepass server -keypass 123456`  
 
 This would generate a 2048 bits RSA key pair and self-signed certificate and store them in its keystore for the server under the project directory, named `server_ks`. The keystore password is set to `server` and the key password is set to `123456`.
@@ -148,7 +148,7 @@ Generating 2,048 bit RSA key pair and self-signed certificate (SHA256withRSA) wi
         for: CN=localhost, OU=cn, O=cn, L=cn, ST=cn, C=cn
 [Storing ./server_ks]
 ```
-Do the same command for generating the client’s keysotre.
+Do the same command for generating the client’s keysotre, `keytool -genkey -v -alias payment-ssl-client -keyalg RSA -keystore ./client_ks -dname "CN=localhost,OU=cn,O=cn,L=cn,ST=cn,C=cn" -storepass client -keypass 123456`.  
 ```terminal
 C:\Users\lizai\Desktop\porfolio\secure-payment-system>keytool -genkey -v -alias payment-ssl-client -keyalg RSA -keystore ./client_ks -dname "CN=localhost,OU=cn,O=cn,L=cn,ST=cn,C=cn" -storepass client -keypass 123456
 Warning:  Different store and key passwords not supported for PKCS12 KeyStores. Ignoring user-specified -keypass value.
