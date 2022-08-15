@@ -129,7 +129,7 @@ For different sessions (based on SSL record protocol and SSL handshake protocol)
 ![image](https://user-images.githubusercontent.com/38242437/183761446-651bad1b-45eb-4058-b05c-d028dd348bde.png)
 ![image](https://user-images.githubusercontent.com/38242437/183761463-58c9b8f3-3130-485d-8b37-f50693cfde1c.png)
 
-This kind of mechanism can prevent attackers from sending permit packets intercepted from previous “client-server communication” to the server to conduct a fake transaction. The previous permit packet encrypted from an obsolete client private key could not be decrypted by the server with a new public key of the client, so the transaction would fail.
+This kind of mechanism can prevent attackers from sending permit packets intercepted from previous “client-server communication” to the server to conduct a fake transaction. The previous permit packet signed from an obsolete client private key could not be decrypted by the server with a new public key of the client, so the transaction would fail.
 
 ## Application installation guide
 **[Enviroment Variables Setting]**  
