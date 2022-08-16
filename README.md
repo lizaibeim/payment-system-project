@@ -1,4 +1,4 @@
-# secure-payment-system
+# SSL Secure Payment System
 
 ## Program Structure
 	Client side:
@@ -79,7 +79,7 @@ Then we use Java SSL package (javax.net.ssl) to implement the authentication of 
 
 The generated session key is used to encrypt data during communication between the client and the server. However, the session key is the symmetric key, so if the data is intercepted by others, it may be decrypted by malicious individuals due to lower security compared to the asymmetric key.  This problem will be solved with the following security mechanism.
 
-### ●	Encryption-with-Password Authentication Protocol
+### ●	Encryption with Password Authentication Protocol
 After construct the SSL authentication protocol, the server and client can trust each other under the premise that the communication between them are secure.
 
 For basic communication between server and client, it is encrypted first via AES with the session key. Besides the basic communication encryption, this program adopts RSA algorithm and SHA1 algorithm to encrypt the data. 
@@ -134,7 +134,7 @@ This kind of mechanism can prevent attackers from sending permit packets interce
 **[Enviroment Variables Setting]**  
 Go to `control panel -> System and Security -> System -> Advanced system settings -> Advanced -> Environment Variables -> 
 System variables -> Path`, add java executable programs path e.g. `C:\Program Files\Java\jdk-18.0.2\bin` to environment varibale.
-### Generate keystore ###
+### Generate Keystore
 Open terminal as administrator, go to the project directory *./secrue-payment-system/*, type the following command:  
 `keytool -genkey -v -alias payment-ssl-server -keyalg RSA -keystore ./server_ks -dname "CN=localhost,OU=cn,O=cn,L=cn,ST=cn,C=cn" -storepass server -keypass 123456`  
 
@@ -155,7 +155,7 @@ Generating 2,048 bit RSA key pair and self-signed certificate (SHA256withRSA) wi
         for: CN=localhost, OU=cn, O=cn, L=cn, ST=cn, C=cn
 [Storing ./client_ks]
 ```
-### Add Trusted Certificate ###
+### Add Trusted Certificate
 Since the certificate of the server is generated manually and there is no signature of any trusted organization, the client cannot verify the validity of the server certificate, and the communication will inevitably fail. It needs to create a repository for the client that holds all the credentials, and then import the server certificate into the repository. In this way, when the client connects to the server, it will find that the server's certificate is in its own trust list, and it can communicate normally.
 
 Next, export the certificate of the server and import it into the client's repository. The first step is to export the certificate of the server with the command `keytool -export -alias payment-ssl-server -keystore ./server_ks -file server_key.cer` and enter the keystore password: `server`.
