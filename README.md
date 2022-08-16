@@ -1,6 +1,6 @@
 # secure-payment-system
 
-## Program structure
+## Program Structure
 	Client side:
 		Class:
                 	SSLClient: Build up a socket listening on port 8443. 
@@ -29,7 +29,7 @@
                 	rsaSplitcode (): for large data set to be encrypted by RSA, split it into proper size
                 	sha1(): hash data by SHA1 algorithm
 
-## Security mechanism
+## Implemented Security Mechanism
 ### ●	SSL Record Protocol and SSL Handshake Protocol
 SSL Record Protocol is based on the secure transaction protocol (e.g., TCP), providing basic services like data encapsulation, compression, and encryption. SSL Handshake Protocol is based on the SSL Record Protocol, used before the data transaction, providing services like identity authentication, encryption algorithms negotiation, and key exchange. 
 
@@ -109,7 +109,7 @@ On the client side, the client receives the cipher text and decrypts the cipher 
 The client verifies the sender by decrypting the signed digested message with the server's public key. If successful, then it will get the digested message. And then the client will use the raw concatenated message to generate a new digested message hashed by the SHA1 algorithm. Then, it will compare the new digested message with the received digested message. If the two are equal, the data is authentic and unaltered. Thus, the client will send a response to inform the server of the successful transaction with the message “true”. Otherwise, it means that the data has been tampered and the client will request the server to resend the message with “false”. The response and request messages are encrypted too. 
 ![image](https://user-images.githubusercontent.com/38242437/183759752-0ef80390-e445-4a07-bc27-c841531e39c7.png)
 
-#### Password authentication
+#### Password Authentication
 The client needs to input their password to complete the transaction. 
 ![image](https://user-images.githubusercontent.com/38242437/183759969-9b8165de-d8f3-4c82-aa84-d360aa5007f1.png)
 
@@ -122,7 +122,7 @@ If the password doesn’t match, the server will inform the client of inputting 
 Then, the client will prompt the user to re-enter the password again.
 ![image](https://user-images.githubusercontent.com/38242437/183760719-5af9896b-982c-4a3c-9b6f-a861cb247e69.png)
 
-#### Random Session Key and Random RSA key pair
+#### Random Session Key and Random RSA Key Pair
 For different sessions (based on SSL record protocol and SSL handshake protocol), the session keys shared by the client and server are different. In the same session, for each transaction, the RSA key pairs of client and server are also different.  The difference is shown as follow in two transactions:
 
 ![image](https://user-images.githubusercontent.com/38242437/183761446-651bad1b-45eb-4058-b05c-d028dd348bde.png)
@@ -130,7 +130,7 @@ For different sessions (based on SSL record protocol and SSL handshake protocol)
 
 This kind of mechanism can prevent attackers from sending permit packets intercepted from previous “client-server communication” to the server to conduct a fake transaction. The previous permit packet signed from an obsolete client private key could not be decrypted by the server with a new public key of the client, so the transaction would fail.
 
-## Application installation guide
+## Application Installation Guide
 **[Enviroment Variables Setting]**  
 Go to `control panel -> System and Security -> System -> Advanced system settings -> Advanced -> Environment Variables -> 
 System variables -> Path`, add java executable programs path e.g. `C:\Program Files\Java\jdk-18.0.2\bin` to environment varibale.
@@ -155,7 +155,7 @@ Generating 2,048 bit RSA key pair and self-signed certificate (SHA256withRSA) wi
         for: CN=localhost, OU=cn, O=cn, L=cn, ST=cn, C=cn
 [Storing ./client_ks]
 ```
-### Add trusted certificate ###
+### Add Trusted Certificate ###
 Since the certificate of the server is generated manually and there is no signature of any trusted organization, the client cannot verify the validity of the server certificate, and the communication will inevitably fail. It needs to create a repository for the client that holds all the credentials, and then import the server certificate into the repository. In this way, when the client connects to the server, it will find that the server's certificate is in its own trust list, and it can communicate normally.
 
 Next, export the certificate of the server and import it into the client's repository. The first step is to export the certificate of the server with the command `keytool -export -alias payment-ssl-server -keystore ./server_ks -file server_key.cer` and enter the keystore password: `server`.
@@ -227,7 +227,7 @@ Trust this certificate? [no]:  yes
 Certificate was added to keystore
 ```
 
-## Use cases (3)
+## Use Cases (3)
 #### 1.
 Please ensure that port 8843 is unused before running the program. The jar files are in path *comp3334_client/out/artifacts/comp3334_client_jar* and *comp3334_server/out/artifacts/comp3334_server_jar*.  
 Firstly, do the command `java –jar comp3334_server.jar in terminal 1`  
