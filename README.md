@@ -99,8 +99,8 @@ For the client side, it stores the private key and public key of itself and the 
 ![image](https://user-images.githubusercontent.com/38242437/183756821-4337a448-1a16-496a-95da-210635c6dae3.png)
 
 When the server sends a message to the client, the server will concatenate the message with the timestamp. In the snapshot (Digest Data -> Content), the first four digits such as 0779 are the total seconds to represent the *minutes:seconds* form, and 500 is the message to be sent.
-Then use the SHA1 function to generate digested message and signed the digested message with server's private key using the RSA algorithm. Create a new String consisting of the signed digested message and the raw concatenated message(with timestamp). In the snapshot, it is represented by the Digested Data (Hashvalue and Content).
-At last, use the RSA algorithm to encrypt the new String by the client’s public key. The result is shown by Hash Data encrypted with RSA 512. 
+Then use the SHA1 function to generate digested message and signed the digested message with server's private key using the RSA algorithm. Create a new String consisting of the signed digested message and the raw concatenated message(with timestamp). In the snapshot, it is represented by the _Digested Data (Hashvalue and Content_).
+At last, use the RSA algorithm to encrypt the new String by the client’s public key. The result is shown by *Hash Data encrypted with RSA 512*. 
 ![image](https://user-images.githubusercontent.com/38242437/183757179-b5fedb46-63f3-47ae-a8ae-cb12aa1de06c.png)
 
 On the client side, the client receives the cipher text and decrypts the cipher text with its private key, and gets the signed digested message and the raw concatenated message.
